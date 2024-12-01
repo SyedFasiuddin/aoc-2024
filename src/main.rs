@@ -1,6 +1,7 @@
+use std::collections::BinaryHeap;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
-use std::collections::HashMap;
 
 #[allow(dead_code)]
 fn day1a(left: Vec<u32>, right: Vec<u32>) -> u32 {
@@ -15,7 +16,10 @@ fn day1a(left: Vec<u32>, right: Vec<u32>) -> u32 {
 fn day1b(left: Vec<u32>, right: Vec<u32>) -> u32 {
     let mut right_hash: HashMap<u32, u32> = Default::default();
     for r in right {
-        right_hash.entry(r).and_modify(|entry| *entry += 1).or_insert(1);
+        right_hash
+            .entry(r)
+            .and_modify(|entry| *entry += 1)
+            .or_insert(1);
     }
 
     let mut similarity = 0;
@@ -44,6 +48,28 @@ fn day1(input: &str) {
 
     // println!("Part A, distance: {}", day1a(left, right));
     println!("Part B, similarity: {}", day1b(left, right));
+}
+
+#[allow(dead_code)]
+fn day1_another_approach(input: &str) {
+    let mut left = BinaryHeap::new();
+    let mut right = BinaryHeap::new();
+    for line in input.lines() {
+        let v = line
+            .split_whitespace()
+            .map(|x| x.parse().expect("Unable to convert str to u32"))
+            .collect::<Vec<u32>>();
+        left.push(v[0]);
+        right.push(v[1]);
+    }
+    assert_eq!(left.len(), right.len(), "Different length of binary heaps");
+
+    let mut distance = 0;
+    while let Some(r) = right.pop() {
+        let l = left.pop().unwrap();
+        distance += r.abs_diff(l);
+    }
+    println!("{}", distance);
 }
 
 fn main() {
