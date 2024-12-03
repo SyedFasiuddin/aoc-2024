@@ -13,7 +13,7 @@
         src = ./.;
 
         buildInputs = with pkgs; [
-          rustc cargo rustfmt
+          rustc cargo rustfmt rust-analyzer
         ];
       };
     };
