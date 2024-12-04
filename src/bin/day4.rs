@@ -4,18 +4,22 @@
 use std::fs::File;
 use std::io::Read;
 
-fn parta(input: &str) {
-    let mut grid: Vec<Vec<char>> = vec![];
+fn make_grid(input: &str) -> Vec<Vec<char>> {
+    let mut grid = vec![];
     input
         .lines()
         .for_each(|line| grid.push(line.chars().collect()));
+    grid
+}
 
-    fn idx_valid(i: i32, j: i32, grid: &Vec<Vec<char>>) -> bool {
-        (i >= 0 && j >= 0) && (i < grid.len() as i32 && j < grid[0].len() as i32)
-    }
+fn idx_valid(i: i32, j: i32, grid: &Vec<Vec<char>>) -> bool {
+    (i >= 0 && j >= 0) && (i < grid.len() as i32 && j < grid[0].len() as i32)
+}
 
+#[allow(dead_code)]
+fn parta(input: &str) {
+    let grid = make_grid(input);
     let word = ['X', 'M', 'A', 'S'];
-
     let dir_x: [i8; 8] = [-1, -1, -1, 0, 0, 1, 1, 1];
     let dir_y: [i8; 8] = [-1, 0, 1, -1, 1, -1, 0, 1];
 
@@ -51,9 +55,16 @@ fn parta(input: &str) {
     println!("Num of XMAS: {num_appeared}");
 }
 
+#[allow(dead_code)]
+fn partb(input: &str) {
+    let _grid = make_grid(input);
+
+    println!("Num of X-MAS: {input}");
+}
+
 fn main() {
     let mut str = String::new();
     let _ = File::open("inputs/4.txt").unwrap().read_to_string(&mut str);
 
-    parta(&str);
+    partb(&str);
 }
