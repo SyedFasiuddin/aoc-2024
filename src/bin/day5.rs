@@ -1,3 +1,5 @@
+// https://youtu.be/LA4RiCDPUlI
+
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
@@ -6,9 +8,26 @@ use std::io::Read;
 fn partb(input: &str) {
     let (page_ord_rules, update_list) = parse_input(input);
     let mut sum_mid = 0;
-    for update in update_list {
+    for mut update in update_list {
         if !follows_print_rules(&update, &page_ord_rules) {
-            todo!("Rearrage and take sum");
+            // Bubble Sort with custom predicate
+            loop {
+                let mut is_sorted = true;
+                for idx in 0..update.len() - 1 {
+                    let x = update[idx];
+                    let y = update[idx + 1];
+                    if page_ord_rules.contains(&(y, x)) {
+                        is_sorted = false;
+                        let tmp = update[idx];
+                        update[idx] = update[idx + 1];
+                        update[idx + 1] = tmp;
+                    }
+                }
+                if is_sorted {
+                    break;
+                }
+            }
+
             sum_mid += update[update.len() / 2];
         }
     }
