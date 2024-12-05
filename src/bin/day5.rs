@@ -1,4 +1,5 @@
 // https://youtu.be/LA4RiCDPUlI
+// https://github.com/Timmoth/AdventofCode/blob/main/2024/src/solution_05_part2.rs
 
 use std::collections::HashMap;
 use std::fs::File;
@@ -10,21 +11,13 @@ fn partb(input: &str) {
     let mut sum_mid = 0;
     for mut update in update_list {
         if !follows_print_rules(&update, &page_ord_rules) {
-            // Bubble Sort with custom predicate
-            loop {
-                let mut is_sorted = true;
-                for idx in 0..update.len() - 1 {
-                    let x = update[idx];
-                    let y = update[idx + 1];
-                    if page_ord_rules.contains(&(y, x)) {
-                        is_sorted = false;
-                        update.swap(idx, idx + 1);
-                    }
+            // Sort with custom predicate
+            update.sort_by(|lhs, rhs| {
+                if page_ord_rules.contains(&(*rhs, *lhs)) {
+                    return std::cmp::Ordering::Less;
                 }
-                if is_sorted {
-                    break;
-                }
-            }
+                std::cmp::Ordering::Greater
+            });
 
             sum_mid += update[update.len() / 2];
         }
