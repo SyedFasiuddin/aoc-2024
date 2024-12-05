@@ -13,7 +13,7 @@
         src = ./.;
 
         buildInputs = with pkgs; [
-          rustc cargo rustfmt rust-analyzer
+          rustc cargo rustfmt rust-analyzer clippy
         ];
       };
     };

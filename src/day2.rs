@@ -24,8 +24,8 @@ fn day2a(input: &str) {
         if diff > 0 {
             // All increasing
             for w in levels.windows(2) {
-                match &w[1] - &w[0] {
-                    -1 | -2 | -3 => continue,
+                match w[1] - w[0] {
+                    -3..=-1 => continue,
                     _ => continue 'outer,
                 }
             }
@@ -33,8 +33,8 @@ fn day2a(input: &str) {
         } else {
             // All decreasing
             for w in levels.windows(2) {
-                match &w[1] - &w[0] {
-                    1 | 2 | 3 => continue,
+                match w[1] - w[0] {
+                    1..=3 => continue,
                     _ => continue 'outer,
                 }
             }
@@ -61,8 +61,8 @@ fn day2b(input: &str) {
         if diff > 0 {
             // All increasing
             for w in levels.windows(2) {
-                match &w[1] - &w[0] {
-                    -1 | -2 | -3 => continue,
+                match w[1] - w[0] {
+                    -3..=-1 => continue,
                     _ => {
                         if !damped {
                             damped = true
@@ -76,8 +76,8 @@ fn day2b(input: &str) {
         } else {
             // All decreasing
             for w in levels.windows(2) {
-                match &w[1] - &w[0] {
-                    1 | 2 | 3 => continue,
+                match w[1] - w[0] {
+                    1..=3 => continue,
                     _ => {
                         if !damped {
                             damped = true
@@ -113,7 +113,8 @@ fn day2a_another_approach(input: &str) {
         // Can't use `.all` before doing `.collect`
         if diffs.iter().all(|&val| val == -1 || val == -2 || val == -3) {
             num_safe += 1;
-        } else if diffs.iter().all(|&val| val == 1 || val == 2 || val == 3) {
+        }
+        if diffs.iter().all(|&val| val == 1 || val == 2 || val == 3) {
             num_safe += 1;
         }
     }

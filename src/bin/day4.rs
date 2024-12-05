@@ -12,7 +12,7 @@ fn make_grid(input: &str) -> Vec<Vec<char>> {
     grid
 }
 
-fn idx_valid(i: i32, j: i32, grid: &Vec<Vec<char>>) -> bool {
+fn idx_valid(i: i32, j: i32, grid: &[Vec<char>]) -> bool {
     (i >= 0 && j >= 0) && (i < grid.len() as i32 && j < grid[0].len() as i32)
 }
 
@@ -37,11 +37,11 @@ fn parta(input: &str) {
                 let mut curr_j = j as i32 + dir_y[dir] as i32;
 
                 // Check 3 more chars in this directions
-                for idx in 1..4 {
+                for ch in word.iter().skip(1) {
                     if !idx_valid(curr_i, curr_j, &grid) {
                         continue 'next_direction;
                     }
-                    if grid[curr_i as usize][curr_j as usize] != word[idx] {
+                    if grid[curr_i as usize][curr_j as usize] != *ch {
                         continue 'next_direction;
                     }
                     curr_i += dir_x[dir] as i32;
@@ -58,13 +58,13 @@ fn parta(input: &str) {
 #[allow(dead_code)]
 fn partb(input: &str) {
     let grid = make_grid(input);
-    let (m, a, s)  = ('M', 'A', 'S');
+    let (m, a, s) = ('M', 'A', 'S');
     let dir_x: [i8; 4] = [-1, -1, 1, 1];
     let dir_y: [i8; 4] = [-1, 1, -1, 1];
 
     let mut num_appeared = 0;
     for i in 0..grid.len() {
-        'next:  for j in 0..grid[0].len() {
+        'next: for j in 0..grid[0].len() {
             if grid[i][j] != a {
                 continue;
             }
@@ -77,28 +77,28 @@ fn partb(input: &str) {
                 if !idx_valid(curr_i, curr_j, &grid) {
                     continue 'next;
                 }
-                if grid[curr_i as usize][curr_j as usize] != m &&
-                    grid[curr_i as usize][curr_j as usize] != s
+                if grid[curr_i as usize][curr_j as usize] != m
+                    && grid[curr_i as usize][curr_j as usize] != s
                 {
                     continue 'next;
                 }
             }
 
             // It is an X (all indexes are valid) but is it X-MAS?
-            if grid[i-1][j-1] == m && grid[i+1][j+1] == s {
-                if grid[i-1][j+1] == m && grid[i+1][j-1] == s {
+            if grid[i - 1][j - 1] == m && grid[i + 1][j + 1] == s {
+                if grid[i - 1][j + 1] == m && grid[i + 1][j - 1] == s {
                     num_appeared += 1;
                 }
-                if grid[i-1][j+1] == s && grid[i+1][j-1] == m {
+                if grid[i - 1][j + 1] == s && grid[i + 1][j - 1] == m {
                     num_appeared += 1;
                 }
             }
 
-            if grid[i-1][j-1] == s && grid[i+1][j+1] == m {
-                if grid[i-1][j+1] == m && grid[i+1][j-1] == s {
+            if grid[i - 1][j - 1] == s && grid[i + 1][j + 1] == m {
+                if grid[i - 1][j + 1] == m && grid[i + 1][j - 1] == s {
                     num_appeared += 1;
                 }
-                if grid[i-1][j+1] == s && grid[i+1][j-1] == m {
+                if grid[i - 1][j + 1] == s && grid[i + 1][j - 1] == m {
                     num_appeared += 1;
                 }
             }

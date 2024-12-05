@@ -18,9 +18,7 @@ fn partb(input: &str) {
                     let y = update[idx + 1];
                     if page_ord_rules.contains(&(y, x)) {
                         is_sorted = false;
-                        let tmp = update[idx];
-                        update[idx] = update[idx + 1];
-                        update[idx + 1] = tmp;
+                        update.swap(idx, idx + 1);
                     }
                 }
                 if is_sorted {
@@ -34,7 +32,7 @@ fn partb(input: &str) {
     println!("Sum of mid pages: {sum_mid}");
 }
 
-fn follows_print_rules(update: &Vec<usize>, rules: &Vec<(usize, usize)>) -> bool {
+fn follows_print_rules(update: &[usize], rules: &Vec<(usize, usize)>) -> bool {
     let mut page_idxes: HashMap<usize, usize> = HashMap::new();
     for (idx, page) in update.iter().enumerate() {
         page_idxes.entry(*page).or_insert(idx);
@@ -42,7 +40,7 @@ fn follows_print_rules(update: &Vec<usize>, rules: &Vec<(usize, usize)>) -> bool
 
     for (a, b) in rules {
         if (page_idxes.contains_key(a) && page_idxes.contains_key(b))
-            && !(page_idxes.get(a) < page_idxes.get(b))
+            && page_idxes.get(a) > page_idxes.get(b)
         {
             return false;
         }
