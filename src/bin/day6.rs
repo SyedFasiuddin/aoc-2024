@@ -45,7 +45,7 @@ impl Map {
                 match self.tiles[i][j] {
                     Tile::Guard(_) => {
                         self.curr_tile = (i as i32, j as i32);
-                        return
+                        return;
                     }
                     _ => continue,
                 }
@@ -91,29 +91,33 @@ impl Map {
         let j = self.curr_tile.1;
         let (mut i, mut j, mut curr_direction) = match self.tiles[i as usize][j as usize] {
             Tile::Guard(direction) => match direction {
-                Direction::North => (i-1, j, direction),
-                Direction::East => (i, j+1, direction),
-                Direction::West => (i, j-1, direction),
-                Direction::South => (i+1, j, direction),
+                Direction::North => (i - 1, j, direction),
+                Direction::East => (i, j + 1, direction),
+                Direction::West => (i, j - 1, direction),
+                Direction::South => (i + 1, j, direction),
             },
             _ => unreachable!("`curr_tile` is always supposed to be guard tile"),
         };
 
-        while self.valid_tile(i as usize, j as usize) && !self.tile_is_obstacle(i as usize, j as usize) {
+        while self.valid_tile(i as usize, j as usize)
+            && !self.tile_is_obstacle(i as usize, j as usize)
+        {
             self.tiles[self.curr_tile.0 as usize][self.curr_tile.1 as usize] = Tile::Visited;
             self.curr_tile.0 = i as i32;
             self.curr_tile.1 = j as i32;
-            self.tiles[self.curr_tile.0 as usize][self.curr_tile.1 as usize] = Tile::Guard(curr_direction);
+            self.tiles[self.curr_tile.0 as usize][self.curr_tile.1 as usize] =
+                Tile::Guard(curr_direction);
 
-            (i, j, curr_direction) = match self.tiles[self.curr_tile.0 as usize][self.curr_tile.1 as usize] {
-                Tile::Guard(direction) => match direction {
-                    Direction::North => (i-1, j, direction),
-                    Direction::East => (i, j+1, direction),
-                    Direction::West => (i, j-1, direction),
-                    Direction::South => (i+1, j, direction),
-                },
-                _ => unreachable!("`curr_tile` is always supposed to be guard tile"),
-            };
+            (i, j, curr_direction) =
+                match self.tiles[self.curr_tile.0 as usize][self.curr_tile.1 as usize] {
+                    Tile::Guard(direction) => match direction {
+                        Direction::North => (i - 1, j, direction),
+                        Direction::East => (i, j + 1, direction),
+                        Direction::West => (i, j - 1, direction),
+                        Direction::South => (i + 1, j, direction),
+                    },
+                    _ => unreachable!("`curr_tile` is always supposed to be guard tile"),
+                };
         }
 
         if !self.valid_tile(i as usize, j as usize) {
