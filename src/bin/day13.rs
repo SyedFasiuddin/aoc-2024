@@ -2,6 +2,52 @@ use regex::Regex;
 use std::fs::File;
 use std::io::Read;
 
+fn partb(input: &str) {
+    let re = Regex::new(
+        r"Button A: X\+(\d+), Y\+(\d+)\nButton B: X\+(\d+), Y\+(\d+)\nPrize: X=(\d+), Y=(\d+)",
+    )
+    .expect("ERROR: Unable to compile regex");
+
+    let mut sum = 0.0;
+
+    for [a1, b1, a2, b2, c1, c2] in
+        re.captures_iter(input)
+            .map(|c| c.extract::<6>())
+            .map(|(_, [a1, b1, a2, b2, c1, c2])| {
+                let a1 = a1
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `a1` into usize");
+                let b1 = b1
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `b1` into usize");
+                let a2 = a2
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `a2` into usize");
+                let b2 = b2
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `b2` into usize");
+                let c1 = c1
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `c1` into usize");
+                let c2 = c2
+                    .parse::<f64>()
+                    .expect("ERROR: Unable to parse `c2` into usize");
+                [a1, b1, a2, b2, c1 + 10000000000000.0, c2 + 10000000000000.0]
+            })
+    {
+        let x: f64 = ((c1 * b2 - a2 * c2) / (a1 * b2 - b1 * a2)) as f64;
+        let y: f64 = ((a1 * c2 - c1 * b1) / (a1 * b2 - b1 * a2)) as f64;
+
+        // solution for x & y should be whole numbers only
+        if x.fract() != 0.0 && y.fract() != 0.0 {
+            continue;
+        }
+        sum += (x * 3.0) + (y * 1.0);
+    }
+    println!("Sum: {sum}");
+}
+
+#[allow(dead_code)]
 fn parta(input: &str) {
     let re = Regex::new(
         r"Button A: X\+(\d+), Y\+(\d+)\nButton B: X\+(\d+), Y\+(\d+)\nPrize: X=(\d+), Y=(\d+)",
@@ -58,5 +104,5 @@ fn main() {
         .unwrap()
         .read_to_string(&mut str);
 
-    parta(&str);
+    partb(&str);
 }
